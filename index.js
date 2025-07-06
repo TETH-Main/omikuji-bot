@@ -28,10 +28,10 @@ client.on('messageCreate', async message => {
       // まずおみくじを振るGIFを表示
       const shakingEmbed = new EmbedBuilder()
         .setTitle('🎋 おみくじを振っています... | Drawing Omikuji...')
-        .setDescription('運勢を占っています。少々お待ちください...\n\nFortune telling in progress. Please wait...')
+        .setDescription('運勢を占っています。少々お待ちください...\nFortune telling in progress. Please wait...')
         .setImage('https://c.tenor.com/NfUHO82zG5wAAAAC/tenor.gif')
         .setColor(0xFFD700)
-        .setFooter({ text: `${message.author.displayName || message.author.username} のおみくじ | ${message.author.displayName || message.author.username}'s Omikuji` })
+        .setFooter({ text: `${message.author.displayName || message.author.username} 's Omikuji` })
         .setTimestamp();
       
       // GIFを表示
@@ -54,12 +54,12 @@ client.on('messageCreate', async message => {
           {
             name: '🌟 良い運勢 (Good Fortune)',
             value: '```' +
-                   '1.  大吉 Dai-kichi   14.1%\n' +
-                   '2.  中吉 Chu-kichi   13.4%\n' +
-                   '3.  小吉 Sho-kichi    9.1%\n' +
-                   '4.   吉 Kichi       28.5%\n' +
-                   '5.  半吉 Han-kichi    4.1%\n' +
-                   '6.  末吉 Sue-kichi    5.2%\n' +
+                   '1.  大吉 Dai-kichi    14.1%\n' +
+                   '2.  中吉 Chu-kichi    13.4%\n' +
+                   '3.  小吉 Sho-kichi     9.1%\n' +
+                   '4.   吉 Kichi         28.5%\n' +
+                   '5.  半吉 Han-kichi     4.1%\n' +
+                   '6.  末吉 Sue-kichi     5.2%\n' +
                    '7. 末小吉 Suesho-kichi 1.3%' +
                    '```',
             inline: true
@@ -68,10 +68,10 @@ client.on('messageCreate', async message => {
             name: '⚡ 悪い運勢 (Bad Fortune)',
             value: '```' +
                    '8.   凶 Kyo         12.9%\n' +
-                   '9.  小凶 Sho-kyo      4.5%\n' +
-                   '10. 半凶 Han-kyo      1.5%\n' +
-                   '11. 末凶 Sue-kyo      3.0%\n' +
-                   '12. 大凶 Dai-kyo      2.4%' +
+                   '9.  小凶 Sho-kyo     4.5%\n' +
+                   '10. 半凶 Han-kyo     1.5%\n' +
+                   '11. 末凶 Sue-kyo     3.0%\n' +
+                   '12. 大凶 Dai-kyo     2.4%' +
                    '```',
             inline: true
           }
