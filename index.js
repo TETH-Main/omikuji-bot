@@ -49,7 +49,7 @@ client.on('messageCreate', async message => {
       const helpEmbed = new EmbedBuilder()
         .setTitle('🎋 おみくじ (Omikuji) ヘルプ')
         .setColor(0xFF6B6B)
-        .setDescription('**omikuji** - 運勢の結果を得ることができます。\n\nおみくじは古代日本の占いです。詳細については[Wiki](https://en.wikipedia.org/wiki/O-mikuji)をご覧ください。')
+        .setDescription('**omikuji** - 運勢の結果を得ることができます。\nYou can get the results of your fortune.\n\nおみくじは古代日本の占いです。詳細については[Wiki](https://en.wikipedia.org/wiki/O-mikuji)をご覧ください。\nOmikuji is an ancient Japanese fortune-telling practice. For more details, please see [Wiki](https://en.wikipedia.org/wiki/O-mikuji).')
         .addFields(
           {
             name: '🌟 良い運勢 (Good Fortune)',
@@ -104,7 +104,7 @@ function lotteryByWeight(replyMessage, arr, weight, url, author) {
       let embedColor;
       let emoji;
       if (i <= 6) { // 良い運勢
-        embedColor = 0x00FF00; // 緑色
+        embedColor = 0xCEB180; // 金色
         emoji = '🌟';
       } else { // 悪い運勢
         embedColor = 0xFF0000; // 赤色
@@ -121,7 +121,7 @@ function lotteryByWeight(replyMessage, arr, weight, url, author) {
           value: `https://www.desmos.com/calculator/${url[i]}`,
           inline: false
         })
-        .setFooter({ text: `${author.displayName || author.username} のおみくじ | ${author.displayName || author.username}'s Omikuji` })
+        .setFooter({ text: `${author.displayName || author.username} 's Omikuji` })
         .setTimestamp();
       
       // メッセージを編集して結果を表示
