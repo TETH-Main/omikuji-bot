@@ -1,7 +1,6 @@
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
-console.log("TOKEN check:", DISCORD_TOKEN ? "FOUND" : "NOT FOUND");
 
 // Set up the Discord bot
 const client = new Client({ 
@@ -30,26 +29,45 @@ client.on('messageCreate', async message => {
       return;
     }
     if (message.content.match(/^help/)) {
-      let help = "";
-      help += "omikuji - You will get the result of your fortune. \n";
-      help += "Omikuji is an ancient Japanese divination of fortune. For more information, please see Wiki. \n https://en.wikipedia.org/wiki/O-mikuji \n";
-      help += "\n The names and probabilities of all fortunes are as follows. \n";
-      help += "good \n" + 
-              "|  1.　大吉 Dai-kichi 14.1% \n" + 
-              "|  2.　中吉 Chu-kichi 13.4% \n" + 
-              "|  3.　小吉 Sho-kichi  9.1% \n" + 
-              "|  4.　　吉 Kichi     28.5% \n" + 
-              "|  5.　半吉 Han-kichi  4.1% \n" + 
-              "|  6.　末吉 Sue-kichi  5.2% \n" + 
-              "|  7.末小吉 Suesho-kichi  1.3% \n" + 
-              "|  8.　　凶 Kyo       12.9% \n" + 
-              "|  9.　小凶 Sho-kyo    4.5% \n" + 
-              "| 10.　半凶 Han-kyo    1.5% \n" + 
-              "| 11.　末凶 Sue-kyo    3.0% \n" + 
-              "| 12.　大凶 Dai-kyo    2.4% \n" +
-              "bad \n\n";
-      help += "You can draw your fortune as many times as you like. \n";
-      message.reply(help);
+      const helpEmbed = new EmbedBuilder()
+        .setTitle('🎋 おみくじ (Omikuji) ヘルプ')
+        .setColor(0xFF6B6B)
+        .setDescription('**omikuji** - 運勢の結果を得ることができます。\n\nおみくじは古代日本の占いです。詳細については[Wiki](https://en.wikipedia.org/wiki/O-mikuji)をご覧ください。')
+        .addFields(
+          {
+            name: '🌟 良い運勢 (Good Fortune)',
+            value: '```' +
+                   '1.  大吉 Dai-kichi   14.1%\n' +
+                   '2.  中吉 Chu-kichi   13.4%\n' +
+                   '3.  小吉 Sho-kichi    9.1%\n' +
+                   '4.   吉 Kichi       28.5%\n' +
+                   '5.  半吉 Han-kichi    4.1%\n' +
+                   '6.  末吉 Sue-kichi    5.2%\n' +
+                   '7. 末小吉 Suesho-kichi 1.3%' +
+                   '```',
+            inline: true
+          },
+          {
+            name: '⚡ 悪い運勢 (Bad Fortune)',
+            value: '```' +
+                   '8.   凶 Kyo         12.9%\n' +
+                   '9.  小凶 Sho-kyo      4.5%\n' +
+                   '10. 半凶 Han-kyo      1.5%\n' +
+                   '11. 末凶 Sue-kyo      3.0%\n' +
+                   '12. 大凶 Dai-kyo      2.4%' +
+                   '```',
+            inline: true
+          }
+        )
+        .addFields({
+          name: '💫 使い方',
+          value: '何度でもおみくじを引くことができます！\n`omikuji` とメッセージを送信してください。',
+          inline: false
+        })
+        .setFooter({ text: '🍀 良い運勢でありますように！' })
+        .setTimestamp();
+      
+      message.reply({ embeds: [helpEmbed] });
       return;
     }
   }
@@ -57,7 +75,6 @@ client.on('messageCreate', async message => {
 
 function lotteryByWeight(msg, arr, weight, url) {
   let totalWeight = 0;
-  let text = "";
   for (let i = 0; i < weight.length; i++) {
     totalWeight += weight[i];
   }
@@ -65,12 +82,31 @@ function lotteryByWeight(msg, arr, weight, url) {
   for (let i = 0; i < weight.length; i++) {
     if (random < weight[i]) {
       let luck = i + 1;
-      text += "====================\n";
-      text += "運勢は " + "**" + arr[i] + "**" + " でした\n";
-      text += "Your luck is number " + luck + " of 12.\n\n";
-      text += "https://www.desmos.com/calculator/" + url[i] + "\n";
-      text += "====================\n";
-      msg.reply(text);
+      
+      // 運勢に応じて色を設定
+      let embedColor;
+      let emoji;
+      if (i <= 6) { // 良い運勢
+        embedColor = 0x00FF00; // 緑色
+        emoji = '🌟';
+      } else { // 悪い運勢
+        embedColor = 0xFF0000; // 赤色
+        emoji = '⚡';
+      }
+      
+      const fortuneEmbed = new EmbedBuilder()
+        .setTitle(`${emoji} おみくじ結果 (Omikuji Result)`)
+        .setColor(embedColor)
+        .setDescription(`**運勢は ${arr[i]} でした**\n\nYour luck is number ${luck} of 12.`)
+        .addFields({
+          name: '📊 グラフを見る',
+          value: `[Desmosで確率分布を確認](https://www.desmos.com/calculator/${url[i]})`,
+          inline: false
+        })
+        .setFooter({ text: `${msg.author.displayName || msg.author.username} のおみくじ` })
+        .setTimestamp();
+      
+      msg.reply({ embeds: [fortuneEmbed] });
       return;
     } else {
       random -= weight[i];
