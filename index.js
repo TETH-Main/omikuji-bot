@@ -1,6 +1,7 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
+console.log("TOKEN check:", DISCORD_TOKEN ? "FOUND" : "NOT FOUND");
 
 // Set up the Discord bot
 const client = new Client({ 
