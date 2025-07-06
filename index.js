@@ -60,8 +60,8 @@ client.on('messageCreate', async message => {
           }
         )
         .addFields({
-          name: '💫 使い方',
-          value: '何度でもおみくじを引くことができます！\n`omikuji` とメッセージを送信してください。',
+          name: '💫 使い方 (How to Use)',
+          value: '何度でもおみくじを引くことができます！\n`omikuji` とメッセージを送信してください。\n\nYou can draw your fortune as many times as you like!\nSend a message with `omikuji`.',
           inline: false
         })
         .setFooter({ text: '🍀 良い運勢でありますように！' })
@@ -98,9 +98,10 @@ function lotteryByWeight(msg, arr, weight, url) {
         .setTitle(`${emoji} おみくじ結果 (Omikuji Result)`)
         .setColor(embedColor)
         .setDescription(`**運勢は ${arr[i]} でした**\n\nYour luck is number ${luck} of 12.`)
+        .setImage(`https://www.desmos.com/calc_thumbs/production/${url[i]}.png`)
         .addFields({
           name: '📊 グラフを見る',
-          value: `[Desmosで確率分布を確認](https://www.desmos.com/calculator/${url[i]})`,
+          value: `https://www.desmos.com/calculator/${url[i]}`,
           inline: false
         })
         .setFooter({ text: `${msg.author.displayName || msg.author.username} のおみくじ` })
