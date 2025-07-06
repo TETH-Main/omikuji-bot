@@ -24,7 +24,24 @@ client.on('messageCreate', async message => {
       let arr = ["大吉 Dai-kichi", "中吉 Chu-kichi", "小吉 Sho-kichi", "吉 Kichi", "半吉 Han-kichi", "末吉 Sue-kichi", "末小吉 Suesho-kichi", "凶 kyo", "小凶 Sho-kyo", "半凶 Han-kyo", "末凶 Sue-kyo", "大凶 Dai-kyo"];
       let weight = [14.1, 13.4, 9.1, 28.5, 4.1, 5.2, 1.3, 12.9, 4.5, 1.5, 3, 2.4];
       let url = ["bj7bkyycqq", "zwzhutaryi", "irbyx7wnjz", "mdvfqbmqn2", "ap0ydvli2i", "zewm5gdu2i", "vha5fj4uzw", "u4kuflirif", "tee0f1nncn", "y6u1xi0lup", "oi7esvgtao", "odbfpxvgcc"];
-      lotteryByWeight(message, arr, weight, url);
+      
+      // まずおみくじを振るGIFを表示
+      const shakingEmbed = new EmbedBuilder()
+        .setTitle('🎋 おみくじを振っています... | Drawing Omikuji...')
+        .setDescription('運勢を占っています。少々お待ちください...\n\nFortune telling in progress. Please wait...')
+        .setImage('https://c.tenor.com/NfUHO82zG5wAAAAC/tenor.gif')
+        .setColor(0xFFD700)
+        .setFooter({ text: `${message.author.displayName || message.author.username} のおみくじ | ${message.author.displayName || message.author.username}'s Omikuji` })
+        .setTimestamp();
+      
+      // GIFを表示
+      const reply = await message.reply({ embeds: [shakingEmbed] });
+      
+      // 2-3秒待ってから結果を表示
+      setTimeout(() => {
+        lotteryByWeight(reply, arr, weight, url, message.author);
+      }, 2500);
+      
       console.log(message.content);
       return;
     }
@@ -64,7 +81,7 @@ client.on('messageCreate', async message => {
           value: '何度でもおみくじを引くことができます！\n`omikuji` とメッセージを送信してください。\n\nYou can draw your fortune as many times as you like!\nSend a message with `omikuji`.',
           inline: false
         })
-        .setFooter({ text: '🍀 良い運勢でありますように！' })
+        .setFooter({ text: '🍀 良い運勢でありますように！ | May you have good fortune!' })
         .setTimestamp();
       
       message.reply({ embeds: [helpEmbed] });
@@ -73,7 +90,7 @@ client.on('messageCreate', async message => {
   }
 });
 
-function lotteryByWeight(msg, arr, weight, url) {
+function lotteryByWeight(replyMessage, arr, weight, url, author) {
   let totalWeight = 0;
   for (let i = 0; i < weight.length; i++) {
     totalWeight += weight[i];
@@ -100,14 +117,15 @@ function lotteryByWeight(msg, arr, weight, url) {
         .setDescription(`**運勢は ${arr[i]} でした**\n\nYour luck is number ${luck} of 12.`)
         .setImage(`https://www.desmos.com/calc_thumbs/production/${url[i]}.png`)
         .addFields({
-          name: '📊 グラフを見る',
+          name: '📊 グラフを見る (View Graph)',
           value: `https://www.desmos.com/calculator/${url[i]}`,
           inline: false
         })
-        .setFooter({ text: `${msg.author.displayName || msg.author.username} のおみくじ` })
+        .setFooter({ text: `${author.displayName || author.username} のおみくじ | ${author.displayName || author.username}'s Omikuji` })
         .setTimestamp();
       
-      msg.reply({ embeds: [fortuneEmbed] });
+      // メッセージを編集して結果を表示
+      replyMessage.edit({ embeds: [fortuneEmbed] });
       return;
     } else {
       random -= weight[i];
